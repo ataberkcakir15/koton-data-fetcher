@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
+using Core.Models.Response;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace Plants.Controllers
 {
@@ -18,6 +20,27 @@ namespace Plants.Controllers
         public async Task<IActionResult> GetAsync()
         {
             var serviceResult = await _plantService.GetPlantInformationsAsync();
+            return StatusCode((int)serviceResult.HttpStatusCode, serviceResult);
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateAsync([FromBody] CreatePlantRequestModel model)
+        {
+            var serviceResult = await _plantService.CreatePlantAsync(model);
+            return StatusCode((int)serviceResult.HttpStatusCode,serviceResult);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdatePlantRequestModel model)
+        {
+            var serviceResult = await _plantService.UpdatePlantAsync(id, model);
+            return StatusCode((int)serviceResult.HttpStatusCode, serviceResult);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            var serviceResult = await _plantService.DeletePlantAsync(id);
             return StatusCode((int)serviceResult.HttpStatusCode, serviceResult);
         }
     }
